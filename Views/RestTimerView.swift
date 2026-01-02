@@ -17,7 +17,7 @@ struct RestTimerView: View {
             Text(formattedTime)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
 
-            // Progress
+            // Progress Ring
             if timer.totalSeconds > 0 {
                 let progress = 1 - Double(timer.remainingSeconds) / Double(timer.totalSeconds)
                 ZStack {
@@ -31,42 +31,14 @@ struct RestTimerView: View {
                 .frame(width: 80, height: 80)
             }
 
-            // Controls
+            // Presets
             HStack(spacing: 16) {
-                Button {
-                    setPreset(60)
-                } label: {
-                    Text("60s")
-                        .font(.subheadline)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                }
-
-                Button {
-                    setPreset(90)
-                } label: {
-                    Text("90s")
-                        .font(.subheadline)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                }
-
-                Button {
-                    setPreset(120)
-                } label: {
-                    Text("120s")
-                        .font(.subheadline)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
-                }
+                presetButton(60)
+                presetButton(90)
+                presetButton(120)
             }
 
+            // Controls
             HStack(spacing: 16) {
                 Button {
                     if timer.isRunning {
@@ -103,16 +75,26 @@ struct RestTimerView: View {
         .padding(.bottom, 16)
     }
 
+    private func presetButton(_ seconds: Int) -> some View {
+        Button {
+            timer.totalSeconds = seconds
+            timer.remainingSeconds = seconds
+            timer.start()
+        } label: {
+            Text("\(seconds)s")
+                .font(.subheadline)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Color(.systemGray6))
+                .cornerRadius(12)
+        }
+    }
+
     private var formattedTime: String {
         let seconds = max(timer.remainingSeconds, 0)
         let m = seconds / 60
         let s = seconds % 60
         return String(format: "%02d:%02d", m, s)
     }
-
-    private func setPreset(_ seconds: Int) {
-        timer.totalSeconds = seconds
-        timer.remainingSeconds = seconds
-        timer.start()
-    }
 }
+

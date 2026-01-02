@@ -5,7 +5,7 @@ struct ExerciseDetailView: View {
     @Binding var exercise: Exercise
 
     // Rest Timer
-    @StateObject private var restTimer = RestTimerManager()
+    @EnvironmentObject var restTimer: RestTimerManager
 
     // Add Set
     @State private var showingAddSet = false
