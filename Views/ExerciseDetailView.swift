@@ -21,6 +21,7 @@ struct ExerciseDetailView: View {
     // Rename Exercise
     @State private var showingRenameSheet = false
     @State private var editedName: String = ""
+    
 
     var body: some View {
         ScrollView {
@@ -111,32 +112,38 @@ struct ExerciseDetailView: View {
                             .padding(.horizontal)
                     } else {
                         ForEach(sortedSets) { set in
-                            Button {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("\(set.weight, specifier: "%.0f") lbs")
+                                        .font(.headline)
+                                    Text("\(set.reps) reps")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(16)
+                            .contentShape(Rectangle()) // makes whole row tappable
+                            .onTapGesture {
                                 selectedSet = set
                                 editWeight = String(format: "%.0f", set.weight)
                                 editReps = "\(set.reps)"
                                 showingEditSet = true
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("\(set.weight, specifier: "%.0f") lbs")
-                                            .font(.headline)
-                                        Text("\(set.reps) reps")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                    }
-
-                                    Spacer()
-
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color(.systemGray6))
-                                .cornerRadius(16)
                             }
-                            .buttonStyle(.plain)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    deleteSet(set)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                         }
                     }
                 }
@@ -285,6 +292,7 @@ struct ExerciseDetailView: View {
                 .foregroundColor(.red)
                 .padding(.bottom, 20)
             }
+            
         }
 
         // MARK: - Rename Exercise Sheet
@@ -322,6 +330,11 @@ struct ExerciseDetailView: View {
                 .foregroundColor(.red)
                 .padding(.bottom, 20)
             }
+        }
+    }
+    private func deleteSet(_ set: ExerciseSet) {
+        if let index = exercise.sets.firstIndex(where: { $0.id == set.id }) {
+            exercise.sets.remove(at: index)
         }
     }
 
