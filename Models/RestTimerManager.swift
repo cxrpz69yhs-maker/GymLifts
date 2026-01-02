@@ -12,7 +12,6 @@ class RestTimerManager: ObservableObject {
     @Published var targetEndTime: Date?
     @Published var showFloatingTimer: Bool = false
 
-
     private var timer: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
 
@@ -51,7 +50,6 @@ class RestTimerManager: ObservableObject {
     }
 
     private func handleAppWillResignActive() {
-        // Stop the in-app ticking loop (iOS will suspend anyway)
         timer?.cancel()
         timer = nil
     }
@@ -59,6 +57,7 @@ class RestTimerManager: ObservableObject {
     // MARK: - Start Timer
     func start() {
         guard remainingSeconds > 0 else { return }
+
         showFloatingTimer = true
 
         if totalSeconds == 0 {
@@ -117,7 +116,7 @@ class RestTimerManager: ObservableObject {
         cancelPendingNotification()
     }
 
-    // MARK: - Reset
+    // MARK: - Reset (full stop)
     func reset() {
         pause()
         remainingSeconds = 0
@@ -126,12 +125,39 @@ class RestTimerManager: ObservableObject {
         showFloatingTimer = false
     }
 
+    // MARK: - Stop (keeps bubble visible)
+    func stop() {
+        pause()
+        remainingSeconds = 0
+        totalSeconds = 0
+        targetEndTime = nil
+    }
+
+    // MARK: - Toggle Play/Pause
+    func togglePlayPause() {
+        if isRunning {
+            pause()
+        } else {
+            start()
+        }
+    }
+
+    // MARK: - Preset
+    func setPreset(_ seconds: Int) {
+        totalSeconds = seconds
+        remainingSeconds = seconds
+        showFloatingTimer = true
+        start()
+    }
+
     // MARK: - Add Time
     func add(seconds: Int) {
         remainingSeconds += seconds
 
         if totalSeconds == 0 {
             totalSeconds = remainingSeconds
+        } else {
+            totalSeconds += seconds
         }
 
         if isRunning {
@@ -168,3 +194,4 @@ class RestTimerManager: ObservableObject {
             .removePendingNotificationRequests(withIdentifiers: ["restTimerFinished"])
     }
 }
+
