@@ -6,7 +6,14 @@ class WorkoutStore: ObservableObject {
     @Published var workouts: [Workout] = []
 
     init() {
-        load()
+        // Try to load saved workouts
+        let loaded = load()
+
+        // If nothing was loaded, use sample data
+        if !loaded {
+            workouts = Workout.sampleData
+            save() // persist sample data so it sticks
+        }
     }
 
     // MARK: - Workouts
@@ -86,19 +93,23 @@ class WorkoutStore: ObservableObject {
 
     // MARK: - Persistence
 
-    private func save() {
+    func save() {
         if let encoded = try? JSONEncoder().encode(workouts) {
             UserDefaults.standard.set(encoded, forKey: "workouts")
         }
     }
 
-    private func load() {
+    /// Returns true if data was successfully loaded, false if no saved data exists.
+    @discardableResult
+    private func load() -> Bool {
         if
             let data = UserDefaults.standard.data(forKey: "workouts"),
             let decoded = try? JSONDecoder().decode([Workout].self, from: data)
         {
             workouts = decoded
+            return true
         }
+
+        return false
     }
 }
-

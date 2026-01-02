@@ -3,7 +3,6 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var workoutStore: WorkoutStore
 
-    // Last 5 sets across all workouts
     var recentWorkouts: [Workout] {
         workoutStore.workouts
             .sorted { $0.date > $1.date }
@@ -11,44 +10,66 @@ struct HomeView: View {
             .map { $0 }
     }
 
-
-
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    
                     // Title
-                    Text("Welcome Back")
-                        .font(.largeTitle.bold())
-                        .padding(.top)
-                    
-                    // Start Workout Button
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Welcome back")
+                            .font(.title2)
+                            .foregroundColor(.secondary)
+                        Text("Let’s train.")
+                            .font(.largeTitle.bold())
+                    }
+                    .padding(.top, 16)
+
+                    // Start Workout
                     NavigationLink {
                         AddWorkoutView()
+                            .environmentObject(workoutStore)
                     } label: {
-                        Text("Start Workout")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Start Workout")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("Create a new workout and start logging sets.")
+                                .font(.subheadline)
+                                .foregroundColor(.white.opacity(0.8))
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            LinearGradient(colors: [.blue, .purple],
+                                           startPoint: .topLeading,
+                                           endPoint: .bottomTrailing)
+                        )
+                        .cornerRadius(20)
                     }
-                    
-                    // Recent Exercises Section
-                    // Recent Workouts Section
+
+                    // Recent Workouts
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Recent Workouts")
-                            .font(.title3.bold())
-                        
+                        HStack {
+                            Text("Recent Workouts")
+                                .font(.headline)
+                            Spacer()
+                            NavigationLink {
+                                WorkoutsView()
+                                    .environmentObject(workoutStore)
+                            } label: {
+                                Text("See all")
+                                    .font(.subheadline)
+                                    .foregroundColor(.blue)
+                            }
+                        }
+
                         if recentWorkouts.isEmpty {
-                            Text("No recent workouts yet.")
+                            Text("No recent workouts yet. Start your first one.")
                                 .foregroundColor(.secondary)
                         } else {
                             ForEach(recentWorkouts) { workout in
                                 HStack {
-                                    VStack(alignment: .leading) {
+                                    VStack(alignment: .leading, spacing: 4) {
                                         Text(workout.name)
                                             .font(.headline)
                                         Text(workout.date.formatted(date: .abbreviated, time: .shortened))
@@ -58,21 +79,21 @@ struct HomeView: View {
                                     Spacer()
                                     Text("\(workout.exercises.count) exercises")
                                         .font(.subheadline)
+                                        .foregroundColor(.secondary)
                                 }
-                                .padding(.vertical, 6)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(16)
                             }
                         }
                     }
+
+                    Spacer(minLength: 20)
                 }
                 .padding(.horizontal)
             }
+            .navigationBarHidden(true)
         }
-        .navigationTitle("")
-        .navigationBarHidden(true)
     }
 }
-#Preview {
-    HomeView()
-        .environmentObject(WorkoutStore())
-}
-

@@ -7,35 +7,56 @@ struct WorkoutsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach($workoutStore.workouts) { $workout in
-                    NavigationLink {
-                        WorkoutDetailView(workout: $workout)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(workout.name)
-                                .font(.headline)
+            ScrollView {
+                VStack(spacing: 16) {
+                    if workoutStore.workouts.isEmpty {
+                        Text("No workouts yet. Tap + to start your first one.")
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 40)
+                            .padding(.horizontal)
+                    } else {
+                        ForEach($workoutStore.workouts) { $workout in
+                            NavigationLink {
+                                WorkoutDetailView(workout: $workout)
+                                    .environmentObject(workoutStore)
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        Text(workout.name)
+                                            .font(.headline)
 
-                            Text(workout.date.formatted(date: .abbreviated, time: .omitted))
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                        Text(workout.date.formatted(date: .abbreviated, time: .shortened))
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
 
-                            if workout.isFinished {
-                                Text("Complete")
-                                    .font(.caption2)
-                                    .fontWeight(.semibold)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
-                                    .background(Color.green.opacity(0.2))
-                                    .foregroundColor(.green)
-                                    .clipShape(Capsule())
+                                        if workout.isFinished {
+                                            Text("Complete")
+                                                .font(.caption2)
+                                                .fontWeight(.semibold)
+                                                .padding(.horizontal, 8)
+                                                .padding(.vertical, 4)
+                                                .background(Color.green.opacity(0.2))
+                                                .foregroundColor(.green)
+                                                .clipShape(Capsule())
+                                        }
+                                    }
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color(.systemGray6))
+                                .cornerRadius(16)
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
-                .onDelete { indexSet in
-                    deleteWorkout(at: indexSet)
-                }
+                .padding()
             }
             .navigationTitle("Workouts")
             .toolbar {
@@ -70,12 +91,9 @@ struct WorkoutsView: View {
             .sheet(isPresented: $showingAddWorkout) {
                 AddWorkoutView()
                     .environmentObject(workoutStore)
+                    .presentationDetents([.fraction(0.6), .medium])
+                    .presentationDragIndicator(.visible)
             }
         }
     }
-
-    private func deleteWorkout(at offsets: IndexSet) {
-        workoutStore.workouts.remove(atOffsets: offsets)
-    }
 }
-
