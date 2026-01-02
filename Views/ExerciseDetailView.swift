@@ -78,9 +78,7 @@ struct ExerciseDetailView: View {
                     HStack(spacing: 12) {
                         ForEach([30, 60, 90], id: \.self) { sec in
                             Button("\(sec)s") {
-                                restTimer.totalSeconds = sec
-                                restTimer.remainingSeconds = sec
-                                restTimer.start()
+                                restTimer.add(seconds: sec)
                             }
                             .font(.subheadline)
                             .padding(.horizontal, 14)
@@ -88,6 +86,7 @@ struct ExerciseDetailView: View {
                             .background(Color(.systemGray6))
                             .cornerRadius(12)
                         }
+
                     }
                 }
                 .padding(.horizontal)

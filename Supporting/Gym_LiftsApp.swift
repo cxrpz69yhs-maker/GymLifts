@@ -14,3 +14,4 @@ struct GymLiftsApp: App {
         }
     }
 }
+

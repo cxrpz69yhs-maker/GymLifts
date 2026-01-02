@@ -10,6 +10,8 @@ class RestTimerManager: ObservableObject {
     @Published var isRunning: Bool = false
     @Published var totalSeconds: Int = 0
     @Published var targetEndTime: Date?
+    @Published var showFloatingTimer: Bool = false
+
 
     private var timer: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()
@@ -57,6 +59,7 @@ class RestTimerManager: ObservableObject {
     // MARK: - Start Timer
     func start() {
         guard remainingSeconds > 0 else { return }
+        showFloatingTimer = true
 
         if totalSeconds == 0 {
             totalSeconds = remainingSeconds
@@ -120,6 +123,7 @@ class RestTimerManager: ObservableObject {
         remainingSeconds = 0
         totalSeconds = 0
         targetEndTime = nil
+        showFloatingTimer = false
     }
 
     // MARK: - Add Time

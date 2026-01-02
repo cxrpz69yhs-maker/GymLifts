@@ -14,6 +14,7 @@
 		4D16D9A72F05AA720085326B /* BackupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D16D9A62F05AA660085326B /* BackupManager.swift */; };
 		4D16D9AD2F05BC030085326B /* NotificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D16D9AC2F05BC030085326B /* NotificationTest.swift */; };
 		4D16D9AF2F0625940085326B /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D16D9AE2F0625940085326B /* HomeView.swift */; };
+		4D7E351E2F082107006B8F12 /* FloatingTimerBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7E351D2F082107006B8F12 /* FloatingTimerBubble.swift */; };
 		4D9F67202EFE59B800945087 /* Gym_LiftsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9F671F2EFE59B800945087 /* Gym_LiftsApp.swift */; };
 		4D9F67222EFE59B800945087 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9F67212EFE59B800945087 /* ContentView.swift */; };
 		4D9F67242EFE59BA00945087 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D9F67232EFE59BA00945087 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 		4D16D9A62F05AA660085326B /* BackupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupManager.swift; sourceTree = "<group>"; };
 		4D16D9AC2F05BC030085326B /* NotificationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTest.swift; sourceTree = "<group>"; };
 		4D16D9AE2F0625940085326B /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		4D7E351D2F082107006B8F12 /* FloatingTimerBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTimerBubble.swift; sourceTree = "<group>"; };
 		4D9F671C2EFE59B800945087 /* Gym Lifts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gym Lifts.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D9F671F2EFE59B800945087 /* Gym_LiftsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gym_LiftsApp.swift; sourceTree = "<group>"; };
 		4D9F67212EFE59B800945087 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		4D9F673B2EFE6A6100945087 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4D9F675C2EFE802300945087 /* MainTabView.swift */,
 				4D9F67212EFE59B800945087 /* ContentView.swift */,
 				4D9F67312EFE5B4D00945087 /* AddLiftView.swift */,
 				4D16D9AE2F0625940085326B /* HomeView.swift */,
@@ -129,7 +132,6 @@
 				4D16D9A62F05AA660085326B /* BackupManager.swift */,
 				4D16D9A02EFFA2D70085326B /* workoutTimerManager.swift */,
 				4D16D99E2EFF64D10085326B /* RestTimerManager.swift */,
-				4D9F675C2EFE802300945087 /* MainTabView.swift */,
 				4D9F67442EFE6ED100945087 /* WorkoutStore.swift */,
 				4D9F67422EFE6C6500945087 /* ExerciseSet.swift */,
 				4D9F67402EFE6C4F00945087 /* Exercise.swift */,
@@ -137,6 +139,7 @@
 				4D9F672A2EFE5A4A00945087 /* LiftEntry.swift */,
 				4D9F672C2EFE5A9200945087 /* LiftStore.swift */,
 				4D9F67332EFE65AE00945087 /* RestTimer.swift */,
+				4D7E351D2F082107006B8F12 /* FloatingTimerBubble.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				4D9F67432EFE6C6800945087 /* ExerciseSet.swift in Sources */,
 				4D9F67592EFE7D9200945087 /* ExerciseLibraryView.swift in Sources */,
 				4D9F672D2EFE5A9200945087 /* LiftStore.swift in Sources */,
+				4D7E351E2F082107006B8F12 /* FloatingTimerBubble.swift in Sources */,
 				4D9F672B2EFE5A4A00945087 /* LiftEntry.swift in Sources */,
 				4D9F674D2EFE6FCE00945087 /* AddWorkoutView.swift in Sources */,
 				4D9F675B2EFE7DC600945087 /* ExerciseStatsView.swift in Sources */,
