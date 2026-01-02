@@ -18,7 +18,7 @@ struct AddExerciseView: View {
 
                 Spacer()
             }
-            .navigationTitle("New Exercise")
+            .navigationTitle("New Exercises")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
