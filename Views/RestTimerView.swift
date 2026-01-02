@@ -5,6 +5,7 @@ struct RestTimerView: View {
 
     var body: some View {
         VStack(spacing: 24) {
+
             Capsule()
                 .fill(Color.secondary.opacity(0.4))
                 .frame(width: 40, height: 4)
@@ -13,11 +14,9 @@ struct RestTimerView: View {
             Text("Rest Timer")
                 .font(.headline)
 
-            // Timer display
             Text(formattedTime)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
 
-            // Progress Ring
             if timer.totalSeconds > 0 {
                 let progress = 1 - Double(timer.remainingSeconds) / Double(timer.totalSeconds)
                 ZStack {
@@ -31,21 +30,15 @@ struct RestTimerView: View {
                 .frame(width: 80, height: 80)
             }
 
-            // Presets
             HStack(spacing: 16) {
                 presetButton(60)
                 presetButton(90)
                 presetButton(120)
             }
 
-            // Controls
             HStack(spacing: 16) {
                 Button {
-                    if timer.isRunning {
-                        timer.pause()
-                    } else {
-                        timer.start()
-                    }
+                    timer.isRunning ? timer.pause() : timer.start()
                 } label: {
                     Text(timer.isRunning ? "Pause" : "Start")
                         .font(.headline)
@@ -73,13 +66,19 @@ struct RestTimerView: View {
             Spacer()
         }
         .padding(.bottom, 16)
+        .onAppear {
+            timer.showFloatingTimer = false
+        }
+        .onDisappear {
+            if timer.remainingSeconds > 0 {
+                timer.showFloatingTimer = true
+            }
+        }
     }
 
     private func presetButton(_ seconds: Int) -> some View {
         Button {
-            timer.totalSeconds = seconds
-            timer.remainingSeconds = seconds
-            timer.start()
+            timer.setPreset(seconds)
         } label: {
             Text("\(seconds)s")
                 .font(.subheadline)

@@ -11,6 +11,7 @@ class RestTimerManager: ObservableObject {
     @Published var totalSeconds: Int = 0
     @Published var targetEndTime: Date?
     @Published var showFloatingTimer: Bool = false
+    @Published var isBubbleExpanded: Bool = false
 
     private var timer: AnyCancellable?
     private var cancellables = Set<AnyCancellable>()

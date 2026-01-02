@@ -30,8 +30,8 @@ struct MainTabView: View {
                 }
             }
 
-            // Tap anywhere to collapse the expanded bubble
-            if restTimer.showFloatingTimer {
+            // Tap-anywhere-to-collapse layer (only when bubble is expanded)
+            if restTimer.showFloatingTimer && restTimer.isBubbleExpanded {
                 Color.clear
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -47,9 +47,11 @@ struct MainTabView: View {
             if restTimer.showFloatingTimer {
                 FloatingTimerBubble()
                     .environmentObject(restTimer)
-                    .transition(.scale)
+                    .transition(.opacity.combined(with: .scale))
                     .zIndex(10)
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: restTimer.showFloatingTimer)
+        .animation(.easeInOut(duration: 0.25), value: restTimer.isBubbleExpanded)
     }
 }
