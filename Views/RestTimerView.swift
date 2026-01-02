@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct RestTimerView: View {
-    @ObservedObject var timer: RestTimerManager
+    @EnvironmentObject var timer: RestTimerManager   // Shared instance
 
     var body: some View {
         VStack(spacing: 24) {
@@ -66,12 +66,21 @@ struct RestTimerView: View {
             Spacer()
         }
         .padding(.bottom, 16)
+
+        // MARK: - Bubble Visibility Logic
         .onAppear {
+            print("🟦 RestTimerView appeared. Hiding bubble.")
             timer.showFloatingTimer = false
+            timer.isBubbleExpanded = false
         }
         .onDisappear {
-            if timer.remainingSeconds > 0 {
+            print("🟥 RestTimerView disappearing. isRunning:", timer.isRunning, "remaining:", timer.remainingSeconds)
+
+            if timer.isRunning && timer.remainingSeconds > 0 {
                 timer.showFloatingTimer = true
+                print("🟩 RestTimerView set showFloatingTimer = true")
+            } else {
+                print("⬜ Bubble NOT shown — timer not active.")
             }
         }
     }

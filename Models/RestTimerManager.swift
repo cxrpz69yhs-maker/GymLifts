@@ -59,7 +59,8 @@ class RestTimerManager: ObservableObject {
     func start() {
         guard remainingSeconds > 0 else { return }
 
-        showFloatingTimer = true
+        // IMPORTANT: Do NOT show the bubble here.
+        // The bubble should only appear when leaving RestTimerView.
 
         if totalSeconds == 0 {
             totalSeconds = remainingSeconds
@@ -103,6 +104,10 @@ class RestTimerManager: ObservableObject {
 
         vibrate()
         cancelPendingNotification()
+
+        // Hide bubble when timer ends
+        showFloatingTimer = false
+        isBubbleExpanded = false
     }
 
     private func vibrate() {
@@ -124,6 +129,7 @@ class RestTimerManager: ObservableObject {
         totalSeconds = 0
         targetEndTime = nil
         showFloatingTimer = false
+        isBubbleExpanded = false
     }
 
     // MARK: - Stop (keeps bubble visible)
@@ -147,7 +153,10 @@ class RestTimerManager: ObservableObject {
     func setPreset(_ seconds: Int) {
         totalSeconds = seconds
         remainingSeconds = seconds
-        showFloatingTimer = true
+
+        // Do NOT show bubble here either.
+        // Bubble appears only when leaving RestTimerView.
+
         start()
     }
 
@@ -195,4 +204,3 @@ class RestTimerManager: ObservableObject {
             .removePendingNotificationRequests(withIdentifiers: ["restTimerFinished"])
     }
 }
-

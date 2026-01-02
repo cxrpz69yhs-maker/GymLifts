@@ -90,6 +90,16 @@ struct ExerciseDetailView: View {
                     }
                 }
                 .padding(.horizontal)
+                .onAppear {
+                    restTimer.showFloatingTimer = false
+                    restTimer.isBubbleExpanded = false
+                }
+                .onDisappear {
+                    if restTimer.isRunning && restTimer.remainingSeconds > 0 {
+                        restTimer.showFloatingTimer = true
+                    }
+                }
+
 
                 // MARK: - Sets List (Modern Cards)
                 VStack(alignment: .leading, spacing: 12) {

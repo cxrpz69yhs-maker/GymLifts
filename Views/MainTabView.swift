@@ -5,7 +5,6 @@ struct MainTabView: View {
 
     var body: some View {
         ZStack {
-            // Main app content
             TabView {
 
                 NavigationStack {
@@ -30,20 +29,16 @@ struct MainTabView: View {
                 }
             }
 
-            // Tap-anywhere-to-collapse layer (only when bubble is expanded)
+            // Tap anywhere to collapse bubble
             if restTimer.showFloatingTimer && restTimer.isBubbleExpanded {
                 Color.clear
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        NotificationCenter.default.post(
-                            name: .collapseFloatingTimer,
-                            object: nil
-                        )
+                        NotificationCenter.default.post(name: .collapseFloatingTimer, object: nil)
                     }
                     .zIndex(5)
             }
 
-            // Floating timer bubble overlay
             if restTimer.showFloatingTimer {
                 FloatingTimerBubble()
                     .environmentObject(restTimer)
@@ -53,5 +48,10 @@ struct MainTabView: View {
         }
         .animation(.easeInOut(duration: 0.25), value: restTimer.showFloatingTimer)
         .animation(.easeInOut(duration: 0.25), value: restTimer.isBubbleExpanded)
+
+        // 🔥 DEBUG PRINT
+        .onChange(of: restTimer.showFloatingTimer) { oldValue, newValue in
+            print("🔥 MainTabView sees showFloatingTimer =", newValue)
+        }
     }
 }
