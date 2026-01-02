@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @EnvironmentObject var restTimer: RestTimerManager   // ← add this
+    @EnvironmentObject var restTimer: RestTimerManager
 
     var body: some View {
         ZStack {
+            // Main app content
             TabView {
 
                 NavigationStack {
@@ -27,6 +28,19 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Exercises", systemImage: "list.bullet")
                 }
+            }
+
+            // Tap anywhere to collapse the expanded bubble
+            if restTimer.showFloatingTimer {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        NotificationCenter.default.post(
+                            name: .collapseFloatingTimer,
+                            object: nil
+                        )
+                    }
+                    .zIndex(5)
             }
 
             // Floating timer bubble overlay

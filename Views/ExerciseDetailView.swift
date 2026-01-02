@@ -40,8 +40,8 @@ struct ExerciseDetailView: View {
 
                     // Timer Display
                     Text(formattedTime)
-                        .font(.system(size: 42, weight: .bold, design: .monospaced))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 42, weight: .bold, design: .rounded))
+                        .frame(maxWidth: .infinity, alignment: .center)
 
                     // Start / Pause / Reset
                     HStack(spacing: 12) {
@@ -68,8 +68,8 @@ struct ExerciseDetailView: View {
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color(.systemGray6))
-                                .foregroundColor(.primary)
+                                .background(Color.red.opacity(0.15))
+                                .foregroundColor(.red)
                                 .cornerRadius(12)
                         }
                     }

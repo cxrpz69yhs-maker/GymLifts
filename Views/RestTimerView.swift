@@ -63,8 +63,8 @@ struct RestTimerView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
-                        .foregroundColor(.primary)
+                        .background(Color.red.opacity(0.15))
+                        .foregroundColor(.red)
                         .cornerRadius(12)
                 }
             }
@@ -97,4 +97,3 @@ struct RestTimerView: View {
         return String(format: "%02d:%02d", m, s)
     }
 }
-

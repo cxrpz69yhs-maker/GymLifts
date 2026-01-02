@@ -9,7 +9,6 @@ struct FloatingTimerBubble: View {
 
     var body: some View {
         ZStack {
-            // Floating bubble / expanded island
             ZStack {
                 if expanded {
                     // Expanded Dynamic Island
@@ -23,7 +22,7 @@ struct FloatingTimerBubble: View {
                         // Top row: timer + reset
                         HStack(spacing: 16) {
                             Text(timeString)
-                                .font(.system(size: 28, weight: .bold, design: .monospaced))
+                                .font(.system(size: 28, weight: .bold, design: .rounded))
 
                             Spacer()
 
@@ -32,9 +31,10 @@ struct FloatingTimerBubble: View {
                                 restTimer.reset()
                             } label: {
                                 Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 26))
-                                    .foregroundColor(.secondary)
+                                    .font(.system(size: 26, weight: .semibold))
+                                    .foregroundColor(.red)   // 🔴 Make it red
                             }
+
                         }
                         .padding(.horizontal, 20)
 
@@ -54,7 +54,7 @@ struct FloatingTimerBubble: View {
                         .shadow(radius: 10)
                         .overlay(
                             Text(timeString)
-                                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                                .font(.system(size: 20, weight: .bold, design: .rounded))
                                 .foregroundColor(.primary)
                         )
                 }
@@ -78,6 +78,11 @@ struct FloatingTimerBubble: View {
             .onTapGesture {
                 withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                     expanded.toggle()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .collapseFloatingTimer)) { _ in
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                    expanded = false
                 }
             }
         }
@@ -104,5 +109,10 @@ struct FloatingTimerBubble: View {
         let sec = s % 60
         return String(format: "%d:%02d", m, sec)
     }
+}
+
+// MARK: - Notification Name
+extension Notification.Name {
+    static let collapseFloatingTimer = Notification.Name("collapseFloatingTimer")
 }
 
