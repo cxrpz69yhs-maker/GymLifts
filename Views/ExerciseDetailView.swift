@@ -234,6 +234,8 @@ struct ExerciseDetailView: View {
         // MARK: - Rest Timer Sheet
         .sheet(isPresented: $showingRestTimer) {
             RestTimerView(timer: restTimer)
+                .presentationDetents([.fraction(0.33)])
+                .presentationDragIndicator(.visible)
         }
     }
 }
