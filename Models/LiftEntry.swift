@@ -7,11 +7,13 @@ struct LiftEntry: Identifiable, Codable {
     var reps: Int
     var date: Date
 
-    init(id: UUID = UUID(),
-         exerciseName: String,
-         weight: Double,
-         reps: Int,
-         date: Date = Date()) {
+    init(
+        id: UUID = UUID(),
+        exerciseName: String,
+        weight: Double,
+        reps: Int,
+        date: Date = Date()
+    ) {
         self.id = id
         self.exerciseName = exerciseName
         self.weight = weight

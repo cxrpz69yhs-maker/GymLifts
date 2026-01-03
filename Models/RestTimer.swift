@@ -3,26 +3,31 @@ import Combine
 
 class RestTimer: ObservableObject {
     @Published var remaining: Int = 0
-    @Published var isRunning = false
+    @Published var isRunning: Bool = false
 
-    private var timer: Timer?
+    private var timer: AnyCancellable?
 
     func start(seconds: Int) {
         remaining = seconds
         isRunning = true
 
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            if self.remaining > 0 {
-                self.remaining -= 1
-            } else {
-                self.stop()
+        timer?.cancel()
+        timer = Timer.publish(every: 1, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+
+                if self.remaining > 0 {
+                    self.remaining -= 1
+                } else {
+                    self.stop()
+                }
             }
-        }
     }
 
     func stop() {
-        timer?.invalidate()
         isRunning = false
+        timer?.cancel()
+        timer = nil
     }
 }

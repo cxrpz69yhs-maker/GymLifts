@@ -112,4 +112,21 @@ class WorkoutStore: ObservableObject {
 
         return false
     }
+    func previousFirstSet(for exerciseName: String, before date: Date) -> ExerciseSet? {
+        // 1. Filter workouts before the current workout date
+        let pastWorkouts = workouts
+            .filter { $0.date < date }
+            .sorted { $0.date > $1.date } // most recent first
+
+        // 2. Find the first workout that contains this exercise
+        for workout in pastWorkouts {
+            if let exercise = workout.exercises.first(where: { $0.name == exerciseName }) {
+                // 3. Return the FIRST set from that exercise
+                return exercise.sets.sorted { $0.date < $1.date }.first
+            }
+        }
+
+        return nil
+    }
+
 }

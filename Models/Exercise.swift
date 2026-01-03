@@ -1,7 +1,7 @@
 import Foundation
 
 struct Exercise: Identifiable, Codable {
-    var id: UUID = UUID()
+    let id: UUID
     var name: String
     var sets: [ExerciseSet]
 

@@ -21,37 +21,51 @@ struct ExerciseDetailView: View {
     // Rename Exercise
     @State private var showingRenameSheet = false
     @State private var editedName: String = ""
-    
+
+    // Delete Confirmation
+    @State private var setPendingDeletion: ExerciseSet?
+    @State private var showingDeleteAlert = false
+
+    // Previous starting set
+    @EnvironmentObject var workoutStore: WorkoutStore
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
+            LazyVStack(spacing: 24) {
 
-                // MARK: - Exercise Name
+                // MARK: - Exercise Name + Previous Baseline
                 HStack {
                     Text(exercise.name)
                         .font(.largeTitle.bold())
+
                     Spacer()
+
+                    if let prev = previousFirstSet {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Previous Baseline")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+
+                            Text("\(prev.weight, specifier: "%.0f") lbs × \(prev.reps) reps")
+                                .font(.headline)
+                        }
+                        .padding(.horizontal)
+                    }
                 }
                 .padding(.top, 12)
                 .padding(.horizontal)
 
+
                 // MARK: - Inline Rest Timer
                 VStack(spacing: 12) {
 
-                    // Timer Display
                     Text(formattedTime)
                         .font(.system(size: 42, weight: .bold, design: .rounded))
                         .frame(maxWidth: .infinity, alignment: .center)
 
-                    // Start / Pause / Reset
                     HStack(spacing: 12) {
                         Button {
-                            if restTimer.isRunning {
-                                restTimer.pause()
-                            } else {
-                                restTimer.start()
-                            }
+                            restTimer.isRunning ? restTimer.pause() : restTimer.start()
                         } label: {
                             Text(restTimer.isRunning ? "Pause" : "Start")
                                 .font(.headline)
@@ -75,7 +89,6 @@ struct ExerciseDetailView: View {
                         }
                     }
 
-                    // Presets
                     HStack(spacing: 12) {
                         ForEach([30, 60, 90], id: \.self) { sec in
                             Button("\(sec)s") {
@@ -87,7 +100,6 @@ struct ExerciseDetailView: View {
                             .background(Color(.systemGray6))
                             .cornerRadius(12)
                         }
-
                     }
                 }
                 .padding(.horizontal)
@@ -102,8 +114,8 @@ struct ExerciseDetailView: View {
                 }
 
 
-                // MARK: - Sets List (Modern Cards)
-                VStack(alignment: .leading, spacing: 12) {
+                // MARK: - Sets List (with delete confirmation)
+                LazyVStack(alignment: .leading, spacing: 12) {
                     let sortedSets = exercise.sets.sorted { $0.date > $1.date }
 
                     if sortedSets.isEmpty {
@@ -123,31 +135,33 @@ struct ExerciseDetailView: View {
 
                                 Spacer()
 
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.secondary)
+                                // DELETE BUTTON WITH CONFIRMATION
+                                Button(role: .destructive) {
+                                    setPendingDeletion = set
+                                    showingDeleteAlert = true
+                                } label: {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.red)
+                                        .padding(.leading, 8)
+                                }
+                                .buttonStyle(.plain)
                             }
                             .padding()
                             .frame(maxWidth: .infinity)
                             .background(Color(.systemGray6))
                             .cornerRadius(16)
-                            .contentShape(Rectangle()) // makes whole row tappable
+                            .contentShape(Rectangle())
                             .onTapGesture {
                                 selectedSet = set
                                 editWeight = String(format: "%.0f", set.weight)
                                 editReps = "\(set.reps)"
                                 showingEditSet = true
                             }
-                            .swipeActions(edge: .trailing) {
-                                Button(role: .destructive) {
-                                    deleteSet(set)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
                         }
                     }
                 }
                 .padding(.horizontal)
+
 
                 // MARK: - Add Set Button
                 Button {
@@ -175,6 +189,21 @@ struct ExerciseDetailView: View {
                 }
             }
         }
+
+        // MARK: - DELETE CONFIRMATION ALERT
+        .alert("Delete Set?", isPresented: $showingDeleteAlert) {
+            Button("Cancel", role: .cancel) {}
+
+            Button("Delete", role: .destructive) {
+                if let set = setPendingDeletion {
+                    deleteSet(set)
+                }
+                setPendingDeletion = nil
+            }
+        } message: {
+            Text("This action cannot be undone.")
+        }
+
 
         // MARK: - Add Set Sheet
         .sheet(isPresented: $showingAddSet) {
@@ -234,6 +263,7 @@ struct ExerciseDetailView: View {
             }
         }
 
+
         // MARK: - Edit Set Sheet
         .sheet(isPresented: $showingEditSet) {
             VStack(spacing: 28) {
@@ -292,8 +322,8 @@ struct ExerciseDetailView: View {
                 .foregroundColor(.red)
                 .padding(.bottom, 20)
             }
-            
         }
+
 
         // MARK: - Rename Exercise Sheet
         .sheet(isPresented: $showingRenameSheet) {
@@ -332,11 +362,7 @@ struct ExerciseDetailView: View {
             }
         }
     }
-    private func deleteSet(_ set: ExerciseSet) {
-        if let index = exercise.sets.firstIndex(where: { $0.id == set.id }) {
-            exercise.sets.remove(at: index)
-        }
-    }
+
 
     // MARK: - Timer Formatting
     private var formattedTime: String {
@@ -345,5 +371,19 @@ struct ExerciseDetailView: View {
         let s = seconds % 60
         return String(format: "%02d:%02d", m, s)
     }
-}
 
+    // MARK: - Previous Baseline
+    var previousFirstSet: ExerciseSet? {
+        workoutStore.previousFirstSet(
+            for: exercise.name,
+            before: workout.date
+        )
+    }
+
+    // MARK: - Delete Function
+    private func deleteSet(_ set: ExerciseSet) {
+        if let index = exercise.sets.firstIndex(where: { $0.id == set.id }) {
+            exercise.sets.remove(at: index)
+        }
+    }
+}

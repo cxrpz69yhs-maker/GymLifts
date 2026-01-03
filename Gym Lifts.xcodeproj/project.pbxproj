@@ -125,17 +125,17 @@
 		4D9F673C2EFE6A7F00945087 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4D9F673E2EFE6C2B00945087 /* Workout.swift */,
+				4D9F67402EFE6C4F00945087 /* Exercise.swift */,
+				4D9F67422EFE6C6500945087 /* ExerciseSet.swift */,
+				4D9F672A2EFE5A4A00945087 /* LiftEntry.swift */,
+				4D9F67332EFE65AE00945087 /* RestTimer.swift */,
 				4D16D9A42EFFB0BD0085326B /* InfiniteRing.swift */,
 				4D16D9A62F05AA660085326B /* BackupManager.swift */,
 				4D16D9A02EFFA2D70085326B /* workoutTimerManager.swift */,
 				4D16D99E2EFF64D10085326B /* RestTimerManager.swift */,
 				4D9F67442EFE6ED100945087 /* WorkoutStore.swift */,
-				4D9F67422EFE6C6500945087 /* ExerciseSet.swift */,
-				4D9F67402EFE6C4F00945087 /* Exercise.swift */,
-				4D9F673E2EFE6C2B00945087 /* Workout.swift */,
-				4D9F672A2EFE5A4A00945087 /* LiftEntry.swift */,
 				4D9F672C2EFE5A9200945087 /* LiftStore.swift */,
-				4D9F67332EFE65AE00945087 /* RestTimer.swift */,
 				4D7E351D2F082107006B8F12 /* FloatingTimerBubble.swift */,
 			);
 			path = Models;

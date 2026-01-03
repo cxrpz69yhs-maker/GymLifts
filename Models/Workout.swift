@@ -5,25 +5,29 @@ struct Workout: Identifiable, Codable {
     var date: Date
     var name: String
     var exercises: [Exercise]
-    var isFinished: Bool = false
-    var duration: TimeInterval = 0
-    
-    var workoutStartTime: Date?
-    var lastOpenedTime: Date?
-    var isTimerRunning: Bool = true
+    var isFinished: Bool
+    var duration: TimeInterval
 
-    init(id: UUID = UUID(), date: Date, name: String, exercises: [Exercise] = []) {
+    init(
+        id: UUID = UUID(),
+        date: Date = Date(),
+        name: String,
+        exercises: [Exercise] = [],
+        isFinished: Bool = false,
+        duration: TimeInterval = 0
+    ) {
         self.id = id
         self.date = date
         self.name = name
         self.exercises = exercises
+        self.isFinished = isFinished
+        self.duration = duration
     }
 }
 
 extension Workout {
     static let sampleData: [Workout] = [
         Workout(
-            date: Date(),
             name: "Push Day",
             exercises: [
                 Exercise(
@@ -66,5 +70,3 @@ extension Workout {
         )
     ]
 }
-
-
